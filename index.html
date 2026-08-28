@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -1812,6 +1811,93 @@ footer{
 
 }
 
+/* =====================================================
+   IMAGE UPLOAD / PORTFOLIO MEDIA
+===================================================== */
+
+.image-upload{
+    position:absolute;
+    inset:auto 14px 14px auto;
+    z-index:10;
+}
+
+.image-upload input{
+    position:absolute;
+    width:1px;
+    height:1px;
+    opacity:0;
+    pointer-events:none;
+}
+
+.image-upload label{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:9px 13px;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:999px;
+    background:rgba(35,28,43,.58);
+    color:#fff;
+    backdrop-filter:blur(10px);
+    font-size:9px;
+    letter-spacing:.08em;
+    cursor:pointer;
+    transition:.25s ease;
+}
+
+.image-upload label:hover{
+    transform:translateY(-2px);
+    background:rgba(35,28,43,.78);
+}
+
+.portfolio-photo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .35s ease, visibility .35s ease;
+    z-index:1;
+}
+
+.portfolio-photo.has-image{
+    opacity:1;
+    visibility:visible;
+}
+
+.portrait-inner .portfolio-photo{
+    object-position:center;
+}
+
+.portrait-inner .fashion-girl{
+    transition:opacity .3s ease;
+}
+
+.portrait-inner:has(.portfolio-photo.has-image) .fashion-girl{
+    opacity:0;
+}
+
+.project-image .project-placeholder-content{
+    position:relative;
+    z-index:2;
+    transition:opacity .3s ease;
+}
+
+.project-image:has(.portfolio-photo.has-image) .project-placeholder-content{
+    opacity:0;
+}
+
+.project-image .portfolio-photo{
+    z-index:1;
+}
+
+.project-image .image-upload{
+    z-index:5;
+}
+
+
 </style>
 </head>
 
@@ -2029,6 +2115,17 @@ footer{
 <div class="portrait">
 
 <div class="portrait-inner">
+
+    <img
+        id="heroImage"
+        class="portfolio-photo"
+        alt="Jidapa portfolio profile"
+    >
+
+    <div class="image-upload">
+        <input type="file" id="heroImageInput" accept="image/*">
+        <label for="heroImageInput">＋ ใส่รูปโปรไฟล์</label>
+    </div>
 
 
 <div class="fashion-girl">
@@ -2492,21 +2589,28 @@ footer{
 
 <div class="project-image fashion-image">
 
-<span class="project-label">
-    FASHION
-</span>
+    <img id="projectImage1" class="portfolio-photo" alt="Fashion project">
 
+    <span class="project-label">
+        FASHION
+    </span>
 
-<div class="dress"></div>
+    <div class="project-placeholder-content">
+        <div class="dress"></div>
 
+        <span class="sparkle one">
+            ✦
+        </span>
 
-<span class="sparkle one">
-    ✦
-</span>
+        <span class="sparkle two">
+            ✧
+        </span>
+    </div>
 
-<span class="sparkle two">
-    ✧
-</span>
+    <div class="image-upload">
+        <input type="file" id="projectImageInput1" accept="image/*">
+        <label for="projectImageInput1">＋ ใส่รูปผลงาน</label>
+    </div>
 
 </div>
 
@@ -2543,16 +2647,25 @@ footer{
 
 <div class="project-image poster-image">
 
-<span>
-    CREATIVE<br>
-    POSTER
-</span>
+    <img id="projectImage2" class="portfolio-photo" alt="Creative poster project">
 
-<strong>
-    ART<br>
-    OF<br>
-    IDEAS
-</strong>
+    <div class="project-placeholder-content">
+        <span>
+            CREATIVE<br>
+            POSTER
+        </span>
+
+        <strong>
+            ART<br>
+            OF<br>
+            IDEAS
+        </strong>
+    </div>
+
+    <div class="image-upload">
+        <input type="file" id="projectImageInput2" accept="image/*">
+        <label for="projectImageInput2">＋ ใส่รูปผลงาน</label>
+    </div>
 
 </div>
 
@@ -2589,15 +2702,24 @@ footer{
 
 <div class="project-image canvas-image">
 
-<span>
-    CANVA
-</span>
+    <img id="projectImage3" class="portfolio-photo" alt="Canva creative composition project">
 
-<div class="flower">
-    ✿
-</div>
+    <div class="project-placeholder-content">
+        <span>
+            CANVA
+        </span>
 
-<div class="canvas-frame"></div>
+        <div class="flower">
+            ✿
+        </div>
+
+        <div class="canvas-frame"></div>
+    </div>
+
+    <div class="image-upload">
+        <input type="file" id="projectImageInput3" accept="image/*">
+        <label for="projectImageInput3">＋ ใส่รูปผลงาน</label>
+    </div>
 
 </div>
 
@@ -2939,6 +3061,7 @@ themeBtn.addEventListener(
 );
 
 
+
 /* =====================================================
    MOBILE MENU
 ===================================================== */
@@ -3217,6 +3340,124 @@ if(
 }
 
 
+
+/* =====================================================
+   IMAGE UPLOAD + LOCAL PREVIEW
+   รูปจะถูกบันทึกไว้ใน browser เครื่องนี้
+===================================================== */
+
+function setupImageUpload(inputId, imageId, storageKey){
+
+    const input = document.getElementById(inputId);
+    const image = document.getElementById(imageId);
+
+    if(!input || !image) return;
+
+    const savedImage = localStorage.getItem(storageKey);
+
+    if(savedImage){
+        image.src = savedImage;
+        image.classList.add("has-image");
+    }
+
+    input.addEventListener("change", event => {
+
+        const file = event.target.files[0];
+
+        if(!file) return;
+
+        if(!file.type.startsWith("image/")){
+            alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = event => {
+
+            const rawImage = new Image();
+
+            rawImage.onload = () => {
+
+                const maxSize = 1400;
+                let width = rawImage.width;
+                let height = rawImage.height;
+
+                if(width > maxSize || height > maxSize){
+
+                    if(width > height){
+                        height = Math.round(height * maxSize / width);
+                        width = maxSize;
+                    }else{
+                        width = Math.round(width * maxSize / height);
+                        height = maxSize;
+                    }
+
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                const context = canvas.getContext("2d");
+                context.drawImage(rawImage, 0, 0, width, height);
+
+                const compressedImage =
+                    canvas.toDataURL("image/jpeg", .82);
+
+                image.src = compressedImage;
+                image.classList.add("has-image");
+
+                try{
+                    localStorage.setItem(
+                        storageKey,
+                        compressedImage
+                    );
+                }catch(error){
+                    console.warn(
+                        "ไม่สามารถบันทึกรูปลง browser ได้",
+                        error
+                    );
+                }
+
+            };
+
+            rawImage.src = event.target.result;
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+
+setupImageUpload(
+    "heroImageInput",
+    "heroImage",
+    "jidapa-hero-image"
+);
+
+setupImageUpload(
+    "projectImageInput1",
+    "projectImage1",
+    "jidapa-project-image-1"
+);
+
+setupImageUpload(
+    "projectImageInput2",
+    "projectImage2",
+    "jidapa-project-image-2"
+);
+
+setupImageUpload(
+    "projectImageInput3",
+    "projectImage3",
+    "jidapa-project-image-3"
+);
+
+
 /* =====================================================
    SMOOTH SCROLL
 ===================================================== */
@@ -3266,4 +3507,3 @@ document
 
 </body>
 </html>
-```
