@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+<!-- รูปทั้งหมดกำหนดในโค้ด: เปลี่ยนชื่อไฟล์ profile.jpg / project1.jpg / project2.jpg / project3.jpg ได้ตามต้องการ -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1811,98 +1812,86 @@ footer{
 
 }
 
-/* =====================================================
-   IMAGE UPLOAD / PORTFOLIO MEDIA
-===================================================== */
 
-.image-upload{
-    position:absolute;
-    inset:auto 14px 14px auto;
-    z-index:10;
+
+/* ===== REAL PORTFOLIO IMAGES ===== */
+/* รูปจริงอยู่ด้านบนสุดของกรอบ และไม่มีภาพวาด/องค์ประกอบตกแต่งมาบัง */
+.portfolio-photo,
+.portfolio-photo.has-image {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block;
 }
 
-.image-upload input{
-    position:absolute;
-    width:1px;
-    height:1px;
-    opacity:0;
-    pointer-events:none;
+/* HERO: ให้รูปเป็นภาพหลักเต็มกรอบ */
+.portrait-inner > .portfolio-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100% !important;
+    object-fit: contain !important;
+    background: transparent;
 }
 
-.image-upload label{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:9px 13px;
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:999px;
-    background:rgba(35,28,43,.58);
-    color:#fff;
-    backdrop-filter:blur(10px);
-    font-size:9px;
-    letter-spacing:.08em;
-    cursor:pointer;
-    transition:.25s ease;
+/* ปิดภาพแฟชั่นจำลองที่เคยบังรูปหน้า */
+.portrait-inner .fashion-girl {
+    display: none !important;
 }
 
-.image-upload label:hover{
-    transform:translateY(-2px);
-    background:rgba(35,28,43,.78);
+/* ไม่ให้ข้อความตกแต่งทับรูป */
+.portrait-inner .portrait-title {
+    display: none !important;
 }
 
-.portfolio-photo{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    visibility:hidden;
-    transition:opacity .35s ease, visibility .35s ease;
-    z-index:1;
+/* PROJECTS: รูปจริงเต็มพื้นที่ และซ่อนของตกแต่งจำลอง */
+.project-image > .portfolio-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100% !important;
+    object-fit: contain !important;
+    background: transparent;
 }
 
-.portfolio-photo.has-image{
-    opacity:1;
-    visibility:visible;
+.project-image .project-placeholder-content {
+    display: none !important;
 }
 
-.portrait-inner .portfolio-photo{
-    object-position:center;
+/* ให้กรอบรูปยังสวยและไม่ตัดส่วนสำคัญของภาพ */
+.project-image {
+    position: relative;
+    background: var(--soft);
 }
 
-.portrait-inner .fashion-girl{
-    transition:opacity .3s ease;
+.portrait-inner {
+    position: relative;
+    overflow: hidden;
 }
-
-.portrait-inner:has(.portfolio-photo.has-image) .fashion-girl{
-    opacity:0;
-}
-
-.project-image .project-placeholder-content{
-    position:relative;
-    z-index:2;
-    transition:opacity .3s ease;
-}
-
-.project-image:has(.portfolio-photo.has-image) .project-placeholder-content{
-    opacity:0;
-}
-
-.project-image .portfolio-photo{
-    z-index:1;
-}
-
-.project-image .image-upload{
-    z-index:5;
-}
-
 
 </style>
 </head>
 
 
 <body>
+
+<!-- =====================================================
+     IMAGE FILES — เปลี่ยนชื่อไฟล์รูปตรงนี้ได้เลย
+     1) รูปหน้าหลัก: 18154.jpg
+     2) ผลงาน 1: project1.jpg
+     3) ผลงาน 2: project2.jpg
+     4) ผลงาน 3: project3.jpg
+
+     ให้นำไฟล์รูปไว้โฟลเดอร์เดียวกับไฟล์ HTML
+     แล้วแก้ชื่อไฟล์ใน src="..." หากต้องการเปลี่ยนรูป
+===================================================== -->
 
 
 <!-- =====================================================
@@ -2116,16 +2105,7 @@ footer{
 
 <div class="portrait-inner">
 
-    <img
-        id="heroImage"
-        class="portfolio-photo"
-        alt="Jidapa portfolio profile"
-    >
-
-    <div class="image-upload">
-        <input type="file" id="heroImageInput" accept="image/*">
-        <label for="heroImageInput">＋ ใส่รูปโปรไฟล์</label>
-    </div>
+    <img id="heroImage" class="portfolio-photo has-image" src="18154.jpg" alt="Jidapa portfolio profile">
 
 
 <div class="fashion-girl">
@@ -2589,7 +2569,7 @@ footer{
 
 <div class="project-image fashion-image">
 
-    <img id="projectImage1" class="portfolio-photo" alt="Fashion project">
+    <img id="projectImage1" class="portfolio-photo has-image" src="project1.jpg" alt="Fashion project">
 
     <span class="project-label">
         FASHION
@@ -2605,11 +2585,6 @@ footer{
         <span class="sparkle two">
             ✧
         </span>
-    </div>
-
-    <div class="image-upload">
-        <input type="file" id="projectImageInput1" accept="image/*">
-        <label for="projectImageInput1">＋ ใส่รูปผลงาน</label>
     </div>
 
 </div>
@@ -2647,7 +2622,7 @@ footer{
 
 <div class="project-image poster-image">
 
-    <img id="projectImage2" class="portfolio-photo" alt="Creative poster project">
+    <img id="projectImage2" class="portfolio-photo has-image" src="project2.jpg" alt="Creative poster project">
 
     <div class="project-placeholder-content">
         <span>
@@ -2660,11 +2635,6 @@ footer{
             OF<br>
             IDEAS
         </strong>
-    </div>
-
-    <div class="image-upload">
-        <input type="file" id="projectImageInput2" accept="image/*">
-        <label for="projectImageInput2">＋ ใส่รูปผลงาน</label>
     </div>
 
 </div>
@@ -2702,7 +2672,7 @@ footer{
 
 <div class="project-image canvas-image">
 
-    <img id="projectImage3" class="portfolio-photo" alt="Canva creative composition project">
+    <img id="projectImage3" class="portfolio-photo has-image" src="project3.jpg" alt="Canva creative composition project">
 
     <div class="project-placeholder-content">
         <span>
@@ -2714,11 +2684,6 @@ footer{
         </div>
 
         <div class="canvas-frame"></div>
-    </div>
-
-    <div class="image-upload">
-        <input type="file" id="projectImageInput3" accept="image/*">
-        <label for="projectImageInput3">＋ ใส่รูปผลงาน</label>
     </div>
 
 </div>
@@ -3015,6 +2980,19 @@ const sections =
 
 const revealElements =
     document.querySelectorAll(".reveal");
+
+
+/* =====================================================
+   IMAGE CHECK
+   ถ้าชื่อไฟล์ผิด จะไม่แสดงภาพจำลองมาบัง
+===================================================== */
+
+document.querySelectorAll(".portfolio-photo").forEach(image => {
+    image.addEventListener("error", () => {
+        image.style.display = "none";
+        image.closest(".portrait-inner, .project-image")?.classList.add("image-missing");
+    });
+});
 
 
 /* =====================================================
@@ -3339,123 +3317,6 @@ if(
 
 }
 
-
-
-/* =====================================================
-   IMAGE UPLOAD + LOCAL PREVIEW
-   รูปจะถูกบันทึกไว้ใน browser เครื่องนี้
-===================================================== */
-
-function setupImageUpload(inputId, imageId, storageKey){
-
-    const input = document.getElementById(inputId);
-    const image = document.getElementById(imageId);
-
-    if(!input || !image) return;
-
-    const savedImage = localStorage.getItem(storageKey);
-
-    if(savedImage){
-        image.src = savedImage;
-        image.classList.add("has-image");
-    }
-
-    input.addEventListener("change", event => {
-
-        const file = event.target.files[0];
-
-        if(!file) return;
-
-        if(!file.type.startsWith("image/")){
-            alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น");
-            return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = event => {
-
-            const rawImage = new Image();
-
-            rawImage.onload = () => {
-
-                const maxSize = 1400;
-                let width = rawImage.width;
-                let height = rawImage.height;
-
-                if(width > maxSize || height > maxSize){
-
-                    if(width > height){
-                        height = Math.round(height * maxSize / width);
-                        width = maxSize;
-                    }else{
-                        width = Math.round(width * maxSize / height);
-                        height = maxSize;
-                    }
-
-                }
-
-                const canvas = document.createElement("canvas");
-                canvas.width = width;
-                canvas.height = height;
-
-                const context = canvas.getContext("2d");
-                context.drawImage(rawImage, 0, 0, width, height);
-
-                const compressedImage =
-                    canvas.toDataURL("image/jpeg", .82);
-
-                image.src = compressedImage;
-                image.classList.add("has-image");
-
-                try{
-                    localStorage.setItem(
-                        storageKey,
-                        compressedImage
-                    );
-                }catch(error){
-                    console.warn(
-                        "ไม่สามารถบันทึกรูปลง browser ได้",
-                        error
-                    );
-                }
-
-            };
-
-            rawImage.src = event.target.result;
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
-
-}
-
-
-setupImageUpload(
-    "heroImageInput",
-    "heroImage",
-    "jidapa-hero-image"
-);
-
-setupImageUpload(
-    "projectImageInput1",
-    "projectImage1",
-    "jidapa-project-image-1"
-);
-
-setupImageUpload(
-    "projectImageInput2",
-    "projectImage2",
-    "jidapa-project-image-2"
-);
-
-setupImageUpload(
-    "projectImageInput3",
-    "projectImage3",
-    "jidapa-project-image-3"
-);
 
 
 /* =====================================================
